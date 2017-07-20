@@ -7,7 +7,7 @@ leaflet
 
 part 1 : 引入leaflet.css 和 leaflet.js
 
-为了方便演示直接使用 cdn:
+为了方便演示 使用 cdn:
 
     <!-- Include Leaflet CSS file in the head section of your document: -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
