@@ -8,7 +8,6 @@ leaflet
 part 1 :
     在HTML中引入leaflet 
     
-    ```html
     <link rel="stylesheet" href="libs/leaflet/dist/leaflet.css"/>
     <script src="libs/leaflet/dist/leaflet.js"></script>
-    ```
+  
