@@ -5,7 +5,7 @@ title: 使用leaflet绘制圆和线，模拟台风的移动轨迹!
 
 leaflet 
 
-####part 1 : 引入 leaflet 和 jquery
+###part 1 : 引入 leaflet 和 jquery
 
 为了方便演示 使用 cdn:
 
@@ -18,7 +18,7 @@ leaflet
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 ```
 
-####part 2 : 地图初始化
+###part 2 : 地图初始化
 
 在HTML中添加用于显示地图的容器
 ```html
