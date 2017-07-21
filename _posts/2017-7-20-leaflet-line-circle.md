@@ -1,22 +1,36 @@
 ---
 layout: post
-title: 使用leaflet绘制圆和线!
+title: 使用leaflet绘制圆和线，模拟台风的移动轨迹!
 ---
 
 leaflet 
 
-part 1 : 引入leaflet.css 和 leaflet.js
+####part 1 : 引入 leaflet 和 jquery
 
 为了方便演示 使用 cdn:
 
 ```html
-<!-- Include Leaflet CSS file in the head section of your document: -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
-   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
-   crossorigin=""/>
-   
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
-   integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
-   crossorigin=""></script>
+    <!-- leaflet css-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+    <!-- leaflet js-->
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"></script>
+    <!-- jquery js-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+```
+
+####part 2 : 地图初始化
+
+在HTML中添加用于显示地图的容器
+```html
+    <div id="mapid" style="width: 100%;" ></div>
+```
+初始化地图
+```js
+    //经纬度 为宁波市
+    var map = L.map('mapid').setView([29.860634, 121.601529], 4);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        maxZoom: 18,
+        id: 'mapbox.satellite'
+    }).addTo(map);
 ```

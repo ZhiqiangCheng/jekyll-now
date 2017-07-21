@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>leaflet-typhoon</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="mapid" style="width: 100%;" ></div>
+
+<script>
+
+    //定义对象变量
+    var pram={
+        //地图对象
+        map:null,
+        //当前正在发生对象
+        curTyphoon:"201509",
+        //台风对象
+
+    };
+
+    //函数
+    var method={
+        //初始化函数
+        initMap:function () {
+            //高度全屏
+            var h = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight;
+            $("#mapid").height(h-20);
+
+            //窗口大小改变 始终高度全屏
+            $(window).on("load resize",function() {
+                var h = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight;
+                $("#mapid").height(h-20);
+            });
+
+            //经纬度 为宁波市
+            var map = L.map('mapid').setView([29.860634, 121.601529], 4);
+
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                maxZoom: 18,
+                id: 'mapbox.satellite'
+            }).addTo(map);
+
+            return map;
+        },
+        getTyphoonPath:function (map) {
+            $.getJSON("201509.json",function (res) {
+                console.log(res.data);
+            })
+        }
+    };
+
+    //地图初始化
+    pram.map=method.initMap();
+    //在地图上绘制路径
+    method.getTyphoonPath(pram.map);
+</script>
+</body>
+</html>
