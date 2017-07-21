@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id="mapid" style="width: 100%;" ></div>
+<div id="mapid" style="width: 100%;height: 768px" ></div>
 
 <script>
 
@@ -45,19 +45,91 @@
                 id: 'mapbox.satellite'
             }).addTo(map);
 
+            this.WarningLine(map);
             return map;
         },
-        getTyphoonPath:function (map) {
+        getTyphoonPath:function (map,timeout) {
+            var that=this;
+            var doubleLatLng = [];//用于保存两个坐标的经纬度
+            //获取数据
             $.getJSON("201509.json",function (res) {
-                console.log(res.data);
+                //遍历数据
+                $.each(res.data, function (j, val) {
+
+                    //每个点的经纬度
+                    var latlng = L.latLng(val.latitude,
+                        val.longitude);
+                    //给每个点配置样式
+                    var markerOpts = {
+                        radius: 4,
+                        fillColor: that.getDotColor(val.wind_power),
+                        fillOpacity: 1,
+                        stroke: true,
+                        color: 'gray',
+                        weight: 2,
+                        clickable: true
+                    };
+
+                    window.setTimeout(function () {
+                        if (doubleLatLng.length > 1) {
+                            doubleLatLng.shift();
+                        }
+                        doubleLatLng.push(latlng);
+                        //台风线路
+                        var typhoonLine = L.polyline(doubleLatLng, {color: '#0A7BCC', weight: 2, opacity: 0.8}).addTo(map).bringToBack();
+                        //台风点
+                        var typhoonMarker = L.circleMarker(latlng, markerOpts).addTo(map);
+
+                        //台风风圈
+                        var seven_wind = L.circle(latlng, val.seven_wind * 1000, {
+                            fillColor: 'orange',
+                            fillOpacity: 0.03,
+                            stroke: false
+                        }).addTo(map).bringToBack();
+                    },j*timeout);
+
+                });
             })
+        },
+        //获取等级颜色
+        getDotColor:function (val) {
+          return val > 15 ? "#FF0000" : val > 13 ? "#FA83F6" : val >11 ? "#FAAB2A" : val >9 ? "#F8F92A" : val > 7 ? "#588AF6" : "#51FB52";
+        },
+        //24/48小时警戒线
+        WarningLine:function(map) {
+            var layer = L.polyline([[0, 105], [0, 120], [15, 132], [34, 132]], {
+                "color": 'blue', "weight": 1,
+                "opacity": 1
+            }).addTo(map);
+            L.polyline([[0, 105], [4.5, 113], [11, 119], [18, 119], [22, 127], [34, 127]], {
+                "color": 'yellow', "weight": 1,
+                "opacity": 1
+            }).addTo(map);
+
+            var warning24 = '<div style="color: yellow">24小时警戒线</div>';
+            var warningBound24 = [29.4, 126.2];
+            var Icon24= L.divIcon({html:warning24,iconSize: [0, 0]});
+            L.marker(warningBound24, {
+                icon:Icon24,
+                opacity: 1
+            }).addTo(map);
+
+            var warning48 = '<div style="color: blue">48小时警戒线</div>';
+            var warningBound48LatLng = [29.4, 131.4];
+            var Icon48 = L.divIcon({html:warning48,iconSize: [0, 0],bgPos:[0,0]});
+            L.marker( warningBound48LatLng, {
+                icon:Icon48,
+                opacity: 1
+            }).addTo(map);
         }
     };
 
     //地图初始化
     pram.map=method.initMap();
+
     //在地图上绘制路径
-    method.getTyphoonPath(pram.map);
+    method.getTyphoonPath(pram.map,50);
+
 </script>
 </body>
 </html>
